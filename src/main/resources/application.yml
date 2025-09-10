@@ -1,0 +1,69 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: path_pattern_parser
+  codec:
+    max-in-memory-size: 16777216B
+  profiles:
+    active: ${'@spring.profiles.active@':dev}
+    application:
+        name: OnlineBanking
+# src/main/resources/application.yml
+logging:
+  pattern:
+    console: >-
+      %clr(%d{yyyy-MM-dd HH:mm:ss}){cyan} %clr(%-5level)
+      %clr(${PID:- }){magenta} %clr(---){faint} %clr(%-40.40logger{39}){yellow}
+      %clr(-){faint} %msg%n%clr(%wEx)
+app:
+  allow:
+    origin: [ "*" ]
+    method: [ "GET", "PUT", "POST", "DELETE", "PATCH" ]
+    header:
+      allowed: [
+        "Origin", "Access-Control-Allow-Origin", "Content-Type", "Accept",
+        "Authorization", "Origin,Accept", "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ]
+      exposed: [
+        "Origin", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin"
+      ]
+    routes:
+      ignore:
+        - "/v1/api/web/auth/login"
+        - "/v1/api/web/auth/forget-password"
+        - "/v3/api-docs/**"
+        - "/v3/swagger-ui/**"
+
+swaggerdoc:
+  title: MyApp
+  version: 1.1.1
+  servers:
+    - url: http://localhost:8080
+      description: Local
+    - url: https://staging.myapp.com
+      description: Staging
+    - url: https://api.myapp.com
+      description: Production
+  groups:
+    - name: account
+      packageName: org.sampong.springLearning.account.controller
+    - name: user
+      packageName: org.sampong.onlinebanking.user.controller
+springdoc:
+  api-docs:
+    groups:
+      enabled: true
+    version: openapi_3_1
+    enabled: true
+  cache:
+    disabled: false
+  swagger-ui:
+    defaultModelsExpandDepth: -1
+    doc-expansion: none
+    enabled: true
+    tagsSorter: alpha
+    groups-order: DESC
+    disable-swagger-default-url: true
+    use-root-path: true
+    path: /v3/swagger-ui

@@ -1,0 +1,4 @@
+INSERT INTO public.usr_role (created_date, last_modified_date, status, role_description, role_name, role_status) VALUES (null, null, true, 'Administer role', 'admin', 'ADMIN');
+INSERT INTO public.usr_user (id, created_date, last_modified_date, status, admin, email, enabled, password, username) VALUES (1, '2025-09-10 19:53:30.247615', '2025-09-10 19:55:44.004446', true, true, 'sysadmin@example.com', true, '$2a$10$nN5vVvQzWnCG6HO5wOihNO93iA9kX1atsOLHLnlB2jmsRVVECdqJG', 'System_admin');
+INSERT INTO public.usr_user_detail (id, created_date, last_modified_date, status, email, first_name, last_name, phone_number, user_id) VALUES (1, '2025-09-10 19:53:30.282207', '2025-09-10 19:53:30.301404', true, null, 'System', 'admin', '012345678', 1);
+INSERT INTO public.user_role (user_detail_id, role_id) VALUES (1, 1);
