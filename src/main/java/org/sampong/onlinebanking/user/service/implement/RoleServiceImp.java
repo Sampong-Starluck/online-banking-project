@@ -2,10 +2,12 @@ package org.sampong.onlinebanking.user.service.implement;
 
 import lombok.RequiredArgsConstructor;
 import org.sampong.onlinebanking._common.exception.CustomException;
+import org.sampong.onlinebanking.user.controller.dto.request.RolePageReq;
 import org.sampong.onlinebanking.user.model.Role;
 import org.sampong.onlinebanking.user.repository.RoleRepository;
 import org.sampong.onlinebanking.user.service.RoleService;
 import org.sampong.onlinebanking.user.service.mapper.RoleServiceMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,11 @@ public class RoleServiceImp implements RoleService {
     @Override
     public void delete(Long id) {
 
+    }
+
+    @Override
+    public Page<Role> findAll(RolePageReq rolePageReq) {
+        return null;
     }
 
     @Override

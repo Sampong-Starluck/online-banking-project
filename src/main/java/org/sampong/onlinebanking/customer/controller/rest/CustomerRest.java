@@ -1,0 +1,14 @@
+package org.sampong.onlinebanking.customer.controller.rest;
+
+import org.sampong.onlinebanking._common.base.rest.BasePageRest;
+import org.sampong.onlinebanking._common.constant.AppConstants;
+import org.sampong.onlinebanking.customer.controller.dto.req.CustomerPageRequest;
+import org.sampong.onlinebanking.customer.controller.dto.req.CustomerRequest;
+import org.sampong.onlinebanking.customer.controller.dto.res.CustomerResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@RequestMapping(AppConstants.WEB_PATH+"/customer")
+@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+public interface CustomerRest extends BasePageRest<CustomerRequest, CustomerPageRequest, CustomerResponse> {
+}

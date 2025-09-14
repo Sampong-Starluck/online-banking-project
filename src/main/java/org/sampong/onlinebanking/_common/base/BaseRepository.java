@@ -10,5 +10,5 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface BaseRepository<T> extends JpaRepository<T, Long>, JpaSpecificationExecutor<T> {
     Optional<T> findByIdAndStatusTrue(Long id);
-    Optional<List<T>> findAllByStatusTrue(Long id);
+    Optional<List<T>> findAllByStatusTrue();
 }
