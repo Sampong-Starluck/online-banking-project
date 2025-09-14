@@ -17,5 +17,4 @@ public interface Pagination {
     default Pageable pagination(int page, int size, String field, Sort.Direction direction) {
         return PageRequest.of(page, size, Sort.by(direction, field));
     }
-
 }
