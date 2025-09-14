@@ -1,8 +1,6 @@
 package org.sampong.onlinebanking._common.base.rest;
 
-import org.sampong.onlinebanking._common.base.res.BaseResponse;
 import org.sampong.onlinebanking._common.base.res.PageResponse;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * T3: Page request

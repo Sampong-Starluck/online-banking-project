@@ -92,10 +92,11 @@ public class CustomerServiceImp implements CustomerService {
             predicates.add(cb.equal(root.get("status"), true));
 
             return cb.and(predicates.toArray(new Predicate[0]));
-        }, PageRequest.of(
+        }, pagination(
                 customerPageRequest.getPage(),
                 customerPageRequest.getSize(),
-                Sort.by(Sort.Direction.DESC, "id")
+                "id",
+                Sort.Direction.DESC
         ));
     }
 
