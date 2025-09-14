@@ -26,6 +26,11 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
+    public Optional<List<Role>> findAllList() {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Role> findByName(String name) {
         return Optional.ofNullable(repository.findByRoleNameAndStatusTrue(name)).orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Role Not Found"));
     }
@@ -51,12 +56,12 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
-    public Page<Role> findAll(RolePageReq rolePageReq) {
-        return null;
+    public List<Role> findAllByIds(List<Long> ids) {
+        return Optional.ofNullable(repository.findAllByRoleIds(ids)).orElseGet(List::of);
     }
 
     @Override
-    public List<Role> findAllByIds(List<Long> ids) {
-        return Optional.ofNullable(repository.findAllByRoleIds(ids)).orElseGet(List::of);
+    public Page<Role> findAllPage(RolePageReq rolePageReq) {
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package org.sampong.onlinebanking.user.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.sampong.onlinebanking._common.base.res.BaseResponse;
+import org.sampong.onlinebanking._common.base.res.ObjectResponse;
 import org.sampong.onlinebanking._common.constant.AppConstants;
 import org.sampong.onlinebanking.user.controller.dto.request.ForgetPasswordRequest;
 import org.sampong.onlinebanking.user.controller.dto.request.JwtRequest;
@@ -20,12 +21,12 @@ public class AuthController {
     private final UserService service;
 
     @PostMapping("/login")
-    BaseResponse<JwtResponse> login(@RequestBody JwtRequest request) throws JsonProcessingException {
+    ObjectResponse<JwtResponse> login(@RequestBody JwtRequest request) throws JsonProcessingException {
         return BaseResponse.success(service.login(request));
     }
 
     @PostMapping("/forget-password")
-    BaseResponse<JwtResponse> forgetPassword(@RequestBody ForgetPasswordRequest request) throws JsonProcessingException {
+    ObjectResponse<JwtResponse> forgetPassword(@RequestBody ForgetPasswordRequest request) throws JsonProcessingException {
         return BaseResponse.success(service.forgetPassword(request));
     }
 }

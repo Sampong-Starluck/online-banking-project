@@ -2,6 +2,7 @@ package org.sampong.onlinebanking.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.sampong.onlinebanking._common.base.res.BaseResponse;
+import org.sampong.onlinebanking._common.base.res.ObjectResponse;
 import org.sampong.onlinebanking._common.constant.AppConstants;
 import org.sampong.onlinebanking.user.model.Role;
 import org.sampong.onlinebanking.user.service.RoleService;
@@ -16,17 +17,17 @@ public class RoleController {
     private final RoleService service;
 
     @GetMapping("/{id}")
-    BaseResponse <Role> findById(@PathVariable Long id){
+    ObjectResponse<Role> findById(@PathVariable Long id){
         return service.findById(id).map(BaseResponse::success).orElse(BaseResponse.error("Role not found"));
     }
 
     @PostMapping
-    BaseResponse <Role> save(@RequestBody Role role){
+    ObjectResponse<Role> save(@RequestBody Role role){
         return BaseResponse.success(service.addNew(role));
     }
 
     @PutMapping
-    BaseResponse <Role> update(@RequestBody Role role){
+    ObjectResponse<Role> update(@RequestBody Role role){
         return BaseResponse.success(service.updateObj(role));
     }
 }

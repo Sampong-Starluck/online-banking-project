@@ -1,5 +1,7 @@
 package org.sampong.onlinebanking._common.base.res;
 
+import org.sampong.onlinebanking._common.base.request.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
@@ -7,70 +9,59 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Component
-public class BaseResponse<T> {
+public interface BaseResponse {
 
-    private Response response;
-    private T result;
-    private Integer code;
-    private String msg;
-
-    // ✅ Success factory method
-    public static <T> BaseResponse<T> success(T result) {
-        return BaseResponse.<T>builder()
-                .response(Response.success())
-                .result(result)
-                .build();
+    // ✅ Object response (single or list)
+    static <T> ObjectResponse<T> success(T obj) {
+        return new ObjectResponse<>(obj, Response.success());
     }
 
-    // ✅ Error factory method
-    public static <T> BaseResponse<T> error(String msg) {
-        return BaseResponse.<T>builder()
-                .response(Response.error())
-                .msg(msg)
-                .build();
+    // ✅ Error response
+    static <T> ObjectResponse<T> error() {
+        return new ObjectResponse<>(null, Response.error());
     }
 
-    // ✅ Custom code + message factory
-    public static <T> BaseResponse<T> withCode(int code, String msg, T result) {
-        return BaseResponse.<T>builder()
-                .response(Response.success())
-                .result(result)
-                .code(code)
-                .msg(msg)
-                .build();
+    // ✅ Error response
+    static <T> ObjectResponse<T> error(String message) {
+        return new ObjectResponse<>(null, new Response(400, message));
     }
 
-    // ✅ Custom code + message (no result)
-    public static <T> BaseResponse<T> withCode(int code, String msg) {
-        return BaseResponse.<T>builder()
-                .response(Response.success())
-                .code(code)
-                .msg(msg)
-                .build();
+    // ✅ Message only
+    static MessageResponse withCode(Integer code, String msg) {
+        return new MessageResponse(new Response(code, msg));
     }
 
-    // ✅ Paginated Response (wraps PageResponse<T>)
-    public static <T> BaseResponse<PageResponse<T>> paginated(org.springframework.data.domain.Page<T> pageData) {
-        PageResponse<T> pageResponse = PageResponse.<T>builder()
-                .page(pageData.getNumber() + 1) // Convert 0-indexed Spring pages → 1-indexed
-                .size(pageData.getSize())
-                .total(pageData.getTotalElements())
-                .totalPage((long) pageData.getTotalPages())
-                .results(pageData.getContent())
-                .response(Response.success())
-                .build();
+    // ✅ Paginated response
+    static <T> PageResponse<T> paginated(Page<T> obj) {
+        int size = obj.getPageable().getPageSize();
+        int page = obj.getPageable().getPageNumber();
+        long total = obj.getTotalElements();
+        long totalPage = (total + size) / size;
 
-        return BaseResponse.<PageResponse<T>>builder()
-                .response(Response.success())
-                .result(pageResponse)
-                .build();
+        return new PageResponse<>(page, size, total, totalPage, obj.getContent());
     }
 }
+
+
+/*public interface BaseResponse<T> {
+
+    default ObjectResponse<T> res(T obj) {
+        return new ObjectResponse<>(obj);
+    }
+
+    default MessageResponse res() {
+        return new MessageResponse();
+    }
+
+    default PageResponse<T> res(Page<T> obj) {
+        int size = obj.getPageable().getPageSize();
+        int page = obj.getPageable().getPageNumber();
+        long total = obj.getTotalElements();
+        long totalPage = (total + size) / size;
+
+        return new PageResponse<>(page, size, total, totalPage, obj.getContent());
+    }
+}*/
 
 /*
 @Component

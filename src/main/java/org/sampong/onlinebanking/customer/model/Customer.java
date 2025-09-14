@@ -17,6 +17,7 @@ public class Customer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = 0L;
+    private String refNo;
     private String firstName;
     private String lastName;
     private String email;

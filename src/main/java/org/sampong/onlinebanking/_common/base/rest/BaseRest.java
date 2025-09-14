@@ -1,6 +1,8 @@
 package org.sampong.onlinebanking._common.base.rest;
 
 import org.sampong.onlinebanking._common.base.res.BaseResponse;
+import org.sampong.onlinebanking._common.base.res.MessageResponse;
+import org.sampong.onlinebanking._common.base.res.ObjectResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,18 +15,18 @@ import java.util.List;
 public interface BaseRest <T1, T2> {
 
     @GetMapping("/{id}")
-    BaseResponse<T2> get(@PathVariable Long id);
+    ObjectResponse<T2> get(@PathVariable Long id);
 
     @PostMapping
-    BaseResponse<T2> save(@RequestBody T1 t1);
+    ObjectResponse<T2> save(@RequestBody T1 t1);
 
     @PutMapping
-    BaseResponse<T2> update(@RequestBody T1 t1);
+    ObjectResponse<T2> update(@RequestBody T1 t1);
 
     @DeleteMapping
-    BaseResponse<Void> delete(@PathVariable Long id);
+    MessageResponse delete(@PathVariable Long id);
 
     @GetMapping
-    BaseResponse<List<T2>> findAll();
+    ObjectResponse<List<T2>> findAll();
 
 }

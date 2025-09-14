@@ -2,6 +2,8 @@ package org.sampong.onlinebanking.customer.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.sampong.onlinebanking._common.base.res.BaseResponse;
+import org.sampong.onlinebanking._common.base.res.MessageResponse;
+import org.sampong.onlinebanking._common.base.res.ObjectResponse;
 import org.sampong.onlinebanking.customer.controller.dto.req.CustomerIdentificationRequest;
 import org.sampong.onlinebanking.customer.controller.dto.res.CustomerIdentificationResponse;
 import org.sampong.onlinebanking.customer.controller.mapper.CustomerIdentityRestMapper;
@@ -22,33 +24,33 @@ public class CustomerIdentityController implements CustomerIdentityRest {
     private final CustomerIdentityRestMapper mapper;
 
     @Override
-    public BaseResponse<CustomerIdentificationResponse> get(Long id) {
+    public ObjectResponse<CustomerIdentificationResponse> get(Long id) {
         return service.findById(id).map(mapper::toResponse).map(BaseResponse::success)
-                .orElse(BaseResponse.error(HttpStatus.NOT_FOUND.getReasonPhrase()));
+                .orElseGet(BaseResponse::error);
     }
 
     @Override
-    public BaseResponse<CustomerIdentificationResponse> save(CustomerIdentificationRequest customerIdentificationRequest) {
+    public ObjectResponse<CustomerIdentificationResponse> save(CustomerIdentificationRequest customerIdentificationRequest) {
         return Optional.ofNullable(service.addNew(mapper.fromRequest(customerIdentificationRequest)))
                 .map(mapper::toResponse).map(BaseResponse::success)
                 .orElse(BaseResponse.error(HttpStatus.BAD_REQUEST.getReasonPhrase()));
     }
 
     @Override
-    public BaseResponse<CustomerIdentificationResponse> update(CustomerIdentificationRequest customerIdentificationRequest) {
+    public ObjectResponse<CustomerIdentificationResponse> update(CustomerIdentificationRequest customerIdentificationRequest) {
         return Optional.ofNullable(service.updateObj(mapper.fromRequest(customerIdentificationRequest)))
                 .map(mapper::toResponse).map(BaseResponse::success)
                 .orElse(BaseResponse.error(HttpStatus.BAD_REQUEST.getReasonPhrase()));
     }
 
     @Override
-    public BaseResponse<Void> delete(Long id) {
+    public MessageResponse delete(Long id) {
         service.delete(id);
         return BaseResponse.withCode(200, "Delete identification successfully");
     }
 
     @Override
-    public BaseResponse<List<CustomerIdentificationResponse>> findAll() {
+    public ObjectResponse<List<CustomerIdentificationResponse>> findAll() {
         return service.findAllList().stream()
                 .map(t -> t.stream().map(mapper::toResponse).toList())
                 .map(BaseResponse::success).findAny()

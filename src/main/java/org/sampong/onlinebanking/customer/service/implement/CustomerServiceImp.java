@@ -40,6 +40,7 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public Customer addNew(Customer customer) {
+        customer.setRefNo(generateRefNo(customer));
         return customerRepository.save(customer);
     }
 
@@ -96,5 +97,11 @@ public class CustomerServiceImp implements CustomerService {
                 customerPageRequest.getSize(),
                 Sort.by(Sort.Direction.DESC, "id")
         ));
+    }
+
+    private String generateRefNo(Customer customer) {
+        var firstName = customer.getFirstName();
+        var date = System.currentTimeMillis() / 1000L;
+        return String.format("ref-%s-%s", firstName, date);
     }
 }
