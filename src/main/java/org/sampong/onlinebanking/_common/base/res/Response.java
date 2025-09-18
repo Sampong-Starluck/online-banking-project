@@ -1,8 +1,6 @@
-package org.sampong.onlinebanking._common.base;
+package org.sampong.onlinebanking._common.base.res;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor

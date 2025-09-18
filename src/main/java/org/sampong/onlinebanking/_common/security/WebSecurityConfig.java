@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -68,7 +69,10 @@ public class WebSecurityConfig {
                 .getRoutes()
                 .getIgnore()
                 .stream()
-                .map(i -> PathPatternRequestMatcher.pathPattern(new PathPatternParser().parse(i).getPatternString()))
+                .map(i -> {
+                    var parser = new PathPatternParser().parse(i).getPatternString();
+                    return PathPatternRequestMatcher.pathPattern(parser);
+                })
                 .collect(Collectors.toList());
 
         return new OrRequestMatcher(publicMatchers);
@@ -76,9 +80,8 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http,
-            AuthenticationManager authenticationManager,
-            CorsConfigurationSource corsConfigurationSource) throws Exception {
+            HttpSecurity http, CorsConfigurationSource corsConfigurationSource
+    ) throws Exception {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)

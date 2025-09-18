@@ -47,7 +47,9 @@ swaggerdoc:
       description: Production
   groups:
     - name: account
-      packageName: org.sampong.springLearning.account.controller
+      packageName: org.sampong.onlinebanking.account.controller
+    - name: customer
+      packageName: org.sampong.onlinebanking.customer.controller
     - name: user
       packageName: org.sampong.onlinebanking.user.controller
 springdoc:

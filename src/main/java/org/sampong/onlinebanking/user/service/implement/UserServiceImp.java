@@ -1,12 +1,14 @@
 package org.sampong.onlinebanking.user.service.implement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.sampong.onlinebanking._common.exception.CustomException;
 import org.sampong.onlinebanking._common.utils.JwtUtil;
 import org.sampong.onlinebanking.user.controller.dto.request.CreateUserRequest;
 import org.sampong.onlinebanking.user.controller.dto.request.ForgetPasswordRequest;
 import org.sampong.onlinebanking.user.controller.dto.request.JwtRequest;
+import org.sampong.onlinebanking.user.controller.dto.request.UserPageRequest;
 import org.sampong.onlinebanking.user.controller.dto.response.JwtResponse;
 import org.sampong.onlinebanking.user.model.UserDetail;
 import org.sampong.onlinebanking.user.model.Users;
@@ -14,6 +16,9 @@ import org.sampong.onlinebanking.user.repository.UserDetailRepository;
 import org.sampong.onlinebanking.user.repository.UserRepository;
 import org.sampong.onlinebanking.user.service.RoleService;
 import org.sampong.onlinebanking.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +26,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -55,6 +61,27 @@ public class UserServiceImp implements UserService {
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         repository.save(user);
         return jwtUtil.generateToken(user);
+    }
+
+    @Override
+    public Page<Users> findAllUsers(UserPageRequest pageRequest) {
+        var page = pageRequest.getPage();
+        var size = pageRequest.getSize();
+        return repository.findAll((root, quey, cb) -> {
+            var predicate = new ArrayList<Predicate>();
+            if (pageRequest.getQuery() != null) {
+                var username = cb.equal(root.get("username"), pageRequest.getQuery());
+                var email = cb.equal(root.get("email"), pageRequest.getQuery());
+                var firstName = root.get("userDetail").get("firstName").as(String.class);
+                var lastName = root.get("userDetail").get("lastname").as(String.class);
+                var fullName = cb.concat(cb.concat(firstName, " "), lastName);
+                predicate.add(cb.or(username, email, cb.like(fullName, pageRequest.getQuery())));
+            }
+            // Always filter by status = true
+            predicate.add(cb.equal(root.get("status"), true));
+
+            return cb.and(predicate.toArray(new Predicate[0]));
+        }, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
     }
 
     private Users createUser(CreateUserRequest user) {

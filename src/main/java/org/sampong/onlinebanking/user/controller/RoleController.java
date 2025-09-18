@@ -1,14 +1,13 @@
 package org.sampong.onlinebanking.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.sampong.onlinebanking._common.base.BaseResponse;
+import org.sampong.onlinebanking._common.base.res.BaseResponse;
+import org.sampong.onlinebanking._common.base.res.ObjectResponse;
 import org.sampong.onlinebanking._common.constant.AppConstants;
 import org.sampong.onlinebanking.user.model.Role;
 import org.sampong.onlinebanking.user.service.RoleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,20 +15,19 @@ import java.util.Map;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class RoleController {
     private final RoleService service;
-    private final BaseResponse response;
 
     @GetMapping("/{id}")
-    Map<String,Object> findById(@PathVariable Long id){
-        return response.response(service.findById(id));
+    ObjectResponse<Role> findById(@PathVariable Long id){
+        return service.findById(id).map(BaseResponse::success).orElse(BaseResponse.error("Role not found"));
     }
 
     @PostMapping
-    Map<String,Object> save(@RequestBody Role role){
-        return response.response(service.addNew(role));
+    ObjectResponse<Role> save(@RequestBody Role role){
+        return BaseResponse.success(service.addNew(role));
     }
 
     @PutMapping
-    Map<String,Object> update(@RequestBody Role role){
-        return response.response(service.updateObj(role));
+    ObjectResponse<Role> update(@RequestBody Role role){
+        return BaseResponse.success(service.updateObj(role));
     }
 }

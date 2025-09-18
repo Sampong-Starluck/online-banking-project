@@ -2,10 +2,12 @@ package org.sampong.onlinebanking.user.service.implement;
 
 import lombok.RequiredArgsConstructor;
 import org.sampong.onlinebanking._common.exception.CustomException;
+import org.sampong.onlinebanking.user.controller.dto.request.RolePageReq;
 import org.sampong.onlinebanking.user.model.Role;
 import org.sampong.onlinebanking.user.repository.RoleRepository;
 import org.sampong.onlinebanking.user.service.RoleService;
 import org.sampong.onlinebanking.user.service.mapper.RoleServiceMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,11 @@ public class RoleServiceImp implements RoleService {
     @Override
     public Optional<Role> findById(Long id) {
         return Optional.ofNullable(repository.findByIdAndStatusTrue(id)).orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Role Not Found"));
+    }
+
+    @Override
+    public Optional<List<Role>> findAllList() {
+        return Optional.empty();
     }
 
     @Override
@@ -51,5 +58,10 @@ public class RoleServiceImp implements RoleService {
     @Override
     public List<Role> findAllByIds(List<Long> ids) {
         return Optional.ofNullable(repository.findAllByRoleIds(ids)).orElseGet(List::of);
+    }
+
+    @Override
+    public Page<Role> findAllPage(RolePageReq rolePageReq) {
+        return null;
     }
 }
