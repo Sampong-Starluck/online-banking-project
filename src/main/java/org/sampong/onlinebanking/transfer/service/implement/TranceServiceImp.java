@@ -93,14 +93,13 @@ public class TranceServiceImp implements TranceService {
     @Transactional
     @Override
     public Transaction transferBalance(TransferRequest request) {
-
-        Account src = accountService.findById(request.srcAccountId()).orElseThrow();
-        Account dest = accountService.findById(request.targetAccountId()).orElseThrow();
-
         var result = processTransaction(request);
+
         if (!"SUCCESS".equals(result)) {
             throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "Transfer failed");
         } else {
+            Account src = accountService.findById(request.srcAccountId()).orElseThrow();
+            Account dest = accountService.findById(request.targetAccountId()).orElseThrow();
             var trance = new Transaction();
             trance.setAmount(request.balance());
             trance.setTranceNumber(generateTranceNumber());
@@ -110,20 +109,20 @@ public class TranceServiceImp implements TranceService {
             trance.setSourceAccountNumber(src.getAccountNumber());
             trance.setDestinationAccountNumber(dest.getAccountNumber());
             trance.setCurrency(src.getCurrency());
-            return tranceRepository.save(trance);
+            return addNew(trance);
         }
     }
 
     @Transactional
     @Override
     public Transaction withdrawBalance(TransferRequest request) {
-
-        Account src = accountService.findById(request.srcAccountId()).orElseThrow();
-
         var result = processTransaction(request);
+
         if (!"SUCCESS".equals(result)) {
             throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "Transfer failed");
         } else {
+
+            Account src = accountService.findById(request.srcAccountId()).orElseThrow();
             var trance = new Transaction();
             trance.setAmount(request.balance());
             trance.setTranceNumber(generateTranceNumber());
@@ -131,20 +130,19 @@ public class TranceServiceImp implements TranceService {
             trance.setSourceAccount(src);
             trance.setSourceAccountNumber(src.getAccountNumber());
             trance.setCurrency(request.currency());
-            return tranceRepository.save(trance);
+            return addNew(trance);
         }
     }
 
     @Transactional
     @Override
     public Transaction depositBalance(TransferRequest request) {
-
-        Account dest = accountService.findById(request.targetAccountId()).orElseThrow();
-
         var result = processTransaction(request);
+
         if (!"SUCCESS".equals(result)) {
             throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "Transfer failed");
         } else {
+            Account dest = accountService.findById(request.targetAccountId()).orElseThrow();
             var trance = new Transaction();
             trance.setAmount(request.balance());
             trance.setTranceNumber(generateTranceNumber());
@@ -152,7 +150,7 @@ public class TranceServiceImp implements TranceService {
             trance.setDestinatioAccount(dest);
             trance.setDestinationAccountNumber(dest.getAccountNumber());
             trance.setCurrency(request.currency());
-            return tranceRepository.save(trance);
+            return addNew(trance);
         }
     }
 
