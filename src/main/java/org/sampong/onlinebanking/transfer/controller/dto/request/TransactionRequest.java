@@ -8,6 +8,6 @@ import java.io.Serializable;
  * DTO for {@link org.sampong.onlinebanking.transfer.model.Transaction}
  */
 public record TransactionRequest(Long id, String sourceAccountNumber, ObjectIdRequest sourceAccount,
-                                 String destinationAccountNumber, ObjectIdRequest destinatioAccount, Double amount,
+                                 String destinationAccountNumber, ObjectIdRequest destinationAccount, Double amount,
                                  String description, String tranceNumber) implements Serializable {
 }

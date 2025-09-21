@@ -2,9 +2,14 @@ package org.sampong.onlinebanking.transfer.controller.mapper;
 
 import jakarta.transaction.Transactional;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.sampong.onlinebanking._common.configuration.MapperConfiguration;
+import org.sampong.onlinebanking.transfer.controller.dto.request.DepositRequest;
 import org.sampong.onlinebanking.transfer.controller.dto.request.TransactionRequest;
+import org.sampong.onlinebanking.transfer.controller.dto.request.TransferRequest;
+import org.sampong.onlinebanking.transfer.controller.dto.request.WithdrawRequest;
 import org.sampong.onlinebanking.transfer.controller.dto.res.TransactionResponse;
 import org.sampong.onlinebanking.transfer.model.Transaction;
 
@@ -13,6 +18,9 @@ public interface TransactionRestMapper {
 
     TransactionRestMapper INSTANCE = Mappers.getMapper(TransactionRestMapper.class);
 
-    Transaction from(TransactionRequest transactionRequest);
     TransactionResponse to(Transaction transaction);
+    @Mapping(target = "srcAccountId", source = "accountId")
+    TransferRequest from(WithdrawRequest withdrawRequest);
+    @Mapping(target = "targetAccountId", source = "accountId")
+    TransferRequest from(DepositRequest depositRequest);
 }

@@ -7,8 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sampong.onlinebanking._common.base.BaseEntity;
+import org.sampong.onlinebanking._common.enumerate.AccountType;
 import org.sampong.onlinebanking._common.enumerate.Currency;
+import org.sampong.onlinebanking._common.exception.CustomException;
 import org.sampong.onlinebanking.customer.model.Customer;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -32,9 +35,31 @@ public class Account extends BaseEntity {
     private Double balance;
     @Enumerated(EnumType.STRING)
     private Currency currency;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
+
+    // Business methods
+    public Boolean deposit(Double amount) {
+        if (amount <= 0.0) {
+            throw new CustomException(HttpStatus.FORBIDDEN, "Deposit amount must be positive");
+        }
+        balance += amount;
+        return true;
+    }
+
+    public Boolean withdraw(Double amount) {
+        if (amount <= 0.0) {
+            throw new CustomException(HttpStatus.FORBIDDEN, "Withdrawal amount must be positive");
+        }
+        if (this.balance.compareTo(amount) < 0) {
+            throw new CustomException(HttpStatus.FORBIDDEN, "Insufficient funds");
+        }
+        balance -= amount;
+        return true;
+    }
 }
