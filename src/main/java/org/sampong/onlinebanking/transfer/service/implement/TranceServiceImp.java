@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sampong.onlinebanking._common.annotation.AccountLock;
 import org.sampong.onlinebanking._common.enumerate.TranceStatus;
+import org.sampong.onlinebanking._common.enumerate.TranceType;
 import org.sampong.onlinebanking._common.exception.CustomException;
 import org.sampong.onlinebanking.account.model.Account;
 import org.sampong.onlinebanking.account.service.AccountService;
@@ -108,6 +109,7 @@ public class TranceServiceImp implements TranceService {
             trance.setSourceAccount(src);
             trance.setSourceAccountNumber(src.getAccountNumber());
             trance.setDestinationAccountNumber(dest.getAccountNumber());
+            trance.setTranceType(TranceType.TRANSFER);
             trance.setCurrency(src.getCurrency());
             return addNew(trance);
         }
@@ -126,8 +128,9 @@ public class TranceServiceImp implements TranceService {
             var trance = new Transaction();
             trance.setAmount(request.balance());
             trance.setTranceNumber(generateTranceNumber());
-            trance.setDescription("Account id: " + request.srcAccountId() + " transfer: " + request.balance() + request.currency().name() + " to account: " + request.targetAccountId() );
+            trance.setDescription(request.balance() + request.currency().name() + " from account: " + request.srcAccountId() );
             trance.setSourceAccount(src);
+            trance.setTranceType(TranceType.WITHDRAW);
             trance.setSourceAccountNumber(src.getAccountNumber());
             trance.setCurrency(request.currency());
             return addNew(trance);
@@ -146,9 +149,10 @@ public class TranceServiceImp implements TranceService {
             var trance = new Transaction();
             trance.setAmount(request.balance());
             trance.setTranceNumber(generateTranceNumber());
-            trance.setDescription("Account id: " + request.srcAccountId() + " transfer: " + request.balance() + request.currency().name() + " to account: " + request.targetAccountId() );
+            trance.setDescription("Account: "+request.targetAccountId()+" received " + request.balance()+ " " + request.currency().name());
             trance.setDestinatioAccount(dest);
             trance.setDestinationAccountNumber(dest.getAccountNumber());
+            trance.setTranceType(TranceType.DEPOSIT);
             trance.setCurrency(request.currency());
             return addNew(trance);
         }

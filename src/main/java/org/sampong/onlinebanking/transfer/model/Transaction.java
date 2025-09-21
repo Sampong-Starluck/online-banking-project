@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sampong.onlinebanking._common.base.BaseEntity;
 import org.sampong.onlinebanking._common.enumerate.Currency;
+import org.sampong.onlinebanking._common.enumerate.TranceStatus;
+import org.sampong.onlinebanking._common.enumerate.TranceType;
 import org.sampong.onlinebanking.account.model.Account;
 
 @Entity
@@ -33,4 +35,5 @@ public class Transaction extends BaseEntity {
     private Currency currency = null;
     private String description = null;
     private String tranceNumber = null;
+    private TranceType tranceType = null;
 }
