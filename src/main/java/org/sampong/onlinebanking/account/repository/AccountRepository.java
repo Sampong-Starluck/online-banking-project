@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends BaseRepository<Account> {
     Optional<List<Account>> findAllByCustomerIdAndStatusTrue(Long customerId);
+    Optional<Account> findByAccountNumberAndStatusTrue(String accNumber);
 }

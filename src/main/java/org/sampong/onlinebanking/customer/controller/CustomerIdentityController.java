@@ -10,6 +10,7 @@ import org.sampong.onlinebanking.customer.controller.mapper.CustomerIdentityRest
 import org.sampong.onlinebanking.customer.controller.rest.CustomerIdentityRest;
 import org.sampong.onlinebanking.customer.service.CustomerIdentityService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 public class CustomerIdentityController implements CustomerIdentityRest {
 
     private final CustomerIdentityService service;

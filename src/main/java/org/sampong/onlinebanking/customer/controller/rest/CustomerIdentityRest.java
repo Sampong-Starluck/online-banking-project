@@ -8,6 +8,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping(AppConstants.WEB_PATH+"/customer-identification")
-@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 public interface CustomerIdentityRest extends BaseRest<CustomerIdentificationRequest, CustomerIdentificationResponse> {
 }

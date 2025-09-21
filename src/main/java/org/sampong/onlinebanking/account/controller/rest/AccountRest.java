@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @RequestMapping(AppConstants.WEB_PATH+"/account")
-@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 public interface AccountRest extends BaseRest<AccountRequest, AccountResponse> {
     @GetMapping("/customer/{id}")
     ObjectResponse<List<AccountResponse>> getAllAccountByCustomerId(@PathVariable Long id);

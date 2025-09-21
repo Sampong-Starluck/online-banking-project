@@ -9,6 +9,7 @@ import org.sampong.onlinebanking.account.controller.dto.res.AccountResponse;
 import org.sampong.onlinebanking.account.controller.mapper.AccountRestMapper;
 import org.sampong.onlinebanking.account.controller.rest.AccountRest;
 import org.sampong.onlinebanking.account.service.AccountService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 public class AccountController implements AccountRest {
 
     private final AccountService service;

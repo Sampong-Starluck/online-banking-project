@@ -11,6 +11,7 @@ import org.sampong.onlinebanking.customer.controller.dto.res.CustomerResponse;
 import org.sampong.onlinebanking.customer.controller.mapper.CustomerRestMapper;
 import org.sampong.onlinebanking.customer.controller.rest.CustomerRest;
 import org.sampong.onlinebanking.customer.service.CustomerService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 public class CustomerController implements CustomerRest {
     private final CustomerService service;
     private final CustomerRestMapper mapper;

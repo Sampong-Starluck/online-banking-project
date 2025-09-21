@@ -34,6 +34,9 @@ dependencies {
     // Lombok
     implementation("org.projectlombok:lombok")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-batch")
+    implementation("org.springframework.boot:spring-boot-starter-aop:4.0.0-M2")
+    testImplementation("org.springframework.batch:spring-batch-test")
     annotationProcessor("org.projectlombok:lombok")
 
     // MapStruct

@@ -9,6 +9,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping(AppConstants.WEB_PATH+"/customer")
-@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 public interface CustomerRest extends BasePageRest<CustomerRequest, CustomerPageRequest, CustomerResponse> {
 }

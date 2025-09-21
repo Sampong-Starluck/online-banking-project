@@ -3,6 +3,7 @@ package org.sampong.onlinebanking.account.controller.dto.request;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.sampong.onlinebanking._common.base.request.ObjectIdRequest;
+import org.sampong.onlinebanking._common.enumerate.AccountType;
 import org.sampong.onlinebanking._common.enumerate.Currency;
 import org.sampong.onlinebanking.account.model.Account;
 
@@ -19,6 +20,7 @@ public record AccountRequest(
         LocalDateTime expireDate,
         Double balance,
         Currency currency,
+        AccountType accountType,
         ObjectIdRequest customer
 ) {
 }
