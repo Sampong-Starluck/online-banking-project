@@ -2,12 +2,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: path_pattern_parser
-  codec:
-    max-in-memory-size: 16777216B
+  http:
+    codecs:
+      max-in-memory-size: 16777216B
   profiles:
     active: ${'@spring.profiles.active@':dev}
-    application:
-        name: OnlineBanking
+  application:
+      name: OnlineBanking
 # src/main/resources/application.yml
 logging:
   pattern:
