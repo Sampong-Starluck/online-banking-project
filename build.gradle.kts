@@ -31,11 +31,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-hateoas")
     implementation("org.springframework.boot:spring-boot-starter-webclient")
 
-    // Lombok
-    implementation("org.projectlombok:lombok")
+    // Spring boot starter plugin
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-batch")
     implementation("org.springframework.boot:spring-boot-starter-aop:4.0.0-M2")
+
+    // Lombok
+    implementation("org.projectlombok:lombok")
     testImplementation("org.springframework.batch:spring-batch-test")
     annotationProcessor("org.projectlombok:lombok")
 
@@ -45,6 +47,9 @@ dependencies {
 
     // Lombok + MapStruct binding (so they work together)
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+
+    // JSpecify annotation (NotNull annotation)
+    implementation("org.jetbrains:annotations:26.0.2-1")
 
     // Spring data + JPA + postgreSQL
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

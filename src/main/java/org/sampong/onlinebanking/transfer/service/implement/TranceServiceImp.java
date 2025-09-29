@@ -4,17 +4,18 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.sampong.onlinebanking._common.annotation.AccountLock;
-import org.sampong.onlinebanking._common.enumerate.TranceStatus;
+//import org.sampong.onlinebanking._common.enumerate.TranceStatus;
 import org.sampong.onlinebanking._common.enumerate.TranceType;
 import org.sampong.onlinebanking._common.exception.CustomException;
 import org.sampong.onlinebanking.account.model.Account;
 import org.sampong.onlinebanking.account.service.AccountService;
 import org.sampong.onlinebanking.transfer.controller.dto.request.TransactionPageRequest;
 import org.sampong.onlinebanking.transfer.controller.dto.request.TransferRequest;
-import org.sampong.onlinebanking.transfer.model.DeadLetterTransaction;
+//import org.sampong.onlinebanking.transfer.model.DeadLetterTransaction;
 import org.sampong.onlinebanking.transfer.model.Transaction;
-import org.sampong.onlinebanking.transfer.repository.DeadLetterTranceRepository;
+//import org.sampong.onlinebanking.transfer.repository.DeadLetterTranceRepository;
 import org.sampong.onlinebanking.transfer.repository.TranceRepository;
 import org.sampong.onlinebanking.transfer.service.TranceService;
 import org.sampong.onlinebanking.transfer.service.mapper.TranceServiceMapper;
@@ -22,7 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.resilience.annotation.Retryable;
-import org.springframework.retry.annotation.Recover;
+//import org.springframework.retry.annotation.Recover;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +38,10 @@ public class TranceServiceImp implements TranceService {
     private final TranceRepository tranceRepository;
     private final TranceServiceMapper mapper;
     private final AccountService accountService;
-    private final DeadLetterTranceRepository dlqRepository;
+//    private final DeadLetterTranceRepository dlqRepository;
 
     @Override
-    public Page<Transaction> findAllPage(TransactionPageRequest transactionPageRequest) {
+    public Page<@NotNull Transaction> findAllPage(@NotNull TransactionPageRequest transactionPageRequest) {
         var page = transactionPageRequest.getPage();
         var size = transactionPageRequest.getSize();
         return tranceRepository.findAll((root, query, cb) -> {
@@ -178,22 +179,21 @@ public class TranceServiceImp implements TranceService {
         };
     }
 
-
     // Retry exhausted → record DLQ
-    @Recover
-    public String recover(OptimisticLockException ex, TransferRequest request) {
-        log.error("❌ Transaction permanently failed, moved to DLQ: {}", request);
-
-        DeadLetterTransaction dlq = new DeadLetterTransaction();
-        dlq.setFromAccountId(request.srcAccountId());
-        dlq.setToAccountId(request.targetAccountId());
-        dlq.setAmount(request.balance());
-        dlq.setType(request.type().name());
-        dlq.setCurrency(request.currency());
-        dlq.setReason("Failed after 3 retries: " + ex.getMessage());
-        dlq.setTrxnStatus(TranceStatus.PENDING);
-
-        dlqRepository.save(dlq);
-        return "FAILED: MOVED_TO_DLQ";
-    }
+//    @Recover
+//    public String recover(OptimisticLockException ex, TransferRequest request) {
+//        log.error("❌ Transaction permanently failed, moved to DLQ: {}", request);
+//
+//        DeadLetterTransaction dlq = new DeadLetterTransaction();
+//        dlq.setFromAccountId(request.srcAccountId());
+//        dlq.setToAccountId(request.targetAccountId());
+//        dlq.setAmount(request.balance());
+//        dlq.setType(request.type().name());
+//        dlq.setCurrency(request.currency());
+//        dlq.setReason("Failed after 3 retries: " + ex.getMessage());
+//        dlq.setTrxnStatus(TranceStatus.PENDING);
+//
+//        dlqRepository.save(dlq);
+//        return "FAILED: MOVED_TO_DLQ";
+//    }
 }

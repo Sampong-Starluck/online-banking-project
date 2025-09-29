@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 import org.sampong.onlinebanking._common.exception.CustomException;
 import org.sampong.onlinebanking.customer.controller.dto.req.CustomerPageRequest;
 import org.sampong.onlinebanking.customer.model.Customer;
@@ -60,7 +61,7 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Page<Customer> findAllPage(CustomerPageRequest customerPageRequest) {
+    public Page<@NotNull Customer> findAllPage(CustomerPageRequest customerPageRequest) {
         return customerRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 

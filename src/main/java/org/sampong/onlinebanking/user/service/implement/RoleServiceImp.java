@@ -1,6 +1,7 @@
 package org.sampong.onlinebanking.user.service.implement;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.sampong.onlinebanking._common.exception.CustomException;
 import org.sampong.onlinebanking.user.controller.dto.request.RolePageReq;
 import org.sampong.onlinebanking.user.model.Role;
@@ -61,7 +62,7 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
-    public Page<Role> findAllPage(RolePageReq rolePageReq) {
+    public Page<@NotNull Role> findAllPage(RolePageReq rolePageReq) {
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package org.sampong.onlinebanking.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.jetbrains.annotations.NotNull;
 import org.sampong.onlinebanking._common.base.request.PageRequest;
 import org.sampong.onlinebanking.user.controller.dto.request.CreateUserRequest;
 import org.sampong.onlinebanking.user.controller.dto.request.ForgetPasswordRequest;
@@ -14,5 +15,5 @@ public interface UserService {
     JwtResponse login(JwtRequest jwtRequest) throws JsonProcessingException;
     Users register(CreateUserRequest createUserRequest);
     JwtResponse forgetPassword(ForgetPasswordRequest createUserRequest) throws JsonProcessingException;
-    Page<Users> findAllUsers(UserPageRequest pageRequest);
+    Page<@NotNull Users> findAllUsers(UserPageRequest pageRequest);
 }
