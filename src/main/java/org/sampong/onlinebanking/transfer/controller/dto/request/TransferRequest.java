@@ -1,5 +1,6 @@
 package org.sampong.onlinebanking.transfer.controller.dto.request;
 
+import lombok.Setter;
 import org.sampong.onlinebanking._common.enumerate.Currency;
 import org.sampong.onlinebanking._common.enumerate.TranceType;
 

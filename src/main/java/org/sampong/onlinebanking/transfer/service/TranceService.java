@@ -7,8 +7,8 @@ import org.sampong.onlinebanking.transfer.model.Transaction;
 
 public interface TranceService extends BasePageService<Transaction, TransactionPageRequest> {
 
-    Transaction transferBalance(TransferRequest request);
-    Transaction withdrawBalance(TransferRequest request);
-    Transaction depositBalance(TransferRequest request);
-    String processTransaction(TransferRequest request);
+    Transaction transferBalance(TransferRequest request) throws InterruptedException;
+    Transaction withdrawBalance(TransferRequest request) throws InterruptedException;
+    Transaction depositBalance(TransferRequest request) throws InterruptedException;
+    String processTransaction(TransferRequest request) throws InterruptedException;
 }

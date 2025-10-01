@@ -12,6 +12,8 @@ import org.sampong.onlinebanking.customer.model.Customer;
 import org.sampong.onlinebanking.customer.service.CustomerService;
 import org.sampong.onlinebanking.transfer.controller.dto.request.TransferRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,11 @@ public class AccountServiceImp implements AccountService {
     private final CustomerService customerService;
 
     @Override
+    @Retryable(
+            value = ObjectOptimisticLockingFailureException.class,
+            maxAttempts = 3,
+            delay = 200
+    )
     public Optional<Account> findById(Long id) {
         return Optional.ofNullable(repository.findByIdAndStatusTrue(id)).orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Account not found"));
     }

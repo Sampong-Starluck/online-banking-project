@@ -24,7 +24,7 @@ public class TransactionController implements TransactionRest {
     private final TransactionRestMapper mapper;
 
     @Override
-    public ObjectResponse<TransactionResponse> transfer(TransferRequest transferRequest) {
+    public ObjectResponse<TransactionResponse> transfer(TransferRequest transferRequest) throws InterruptedException {
         return Optional.ofNullable(service.transferBalance(transferRequest))
                 .map(mapper::to).map(BaseResponse::success)
                 .orElseGet(BaseResponse::error);
@@ -45,14 +45,14 @@ public class TransactionController implements TransactionRest {
     }
 
     @Override
-    public ObjectResponse<TransactionResponse> deposit(DepositRequest depositRequest) {
+    public ObjectResponse<TransactionResponse> deposit(DepositRequest depositRequest) throws InterruptedException {
         return Optional.ofNullable(service.depositBalance(mapper.from(depositRequest)))
                 .map(mapper::to).map(BaseResponse::success)
                 .orElseGet(BaseResponse::error);
     }
 
     @Override
-    public ObjectResponse<TransactionResponse> withdraw(WithdrawRequest withdrawRequest) {
+    public ObjectResponse<TransactionResponse> withdraw(WithdrawRequest withdrawRequest) throws InterruptedException {
         return Optional.ofNullable(service.withdrawBalance(mapper.from(withdrawRequest)))
                 .map(mapper::to).map(BaseResponse::success)
                 .orElseGet(BaseResponse::error);

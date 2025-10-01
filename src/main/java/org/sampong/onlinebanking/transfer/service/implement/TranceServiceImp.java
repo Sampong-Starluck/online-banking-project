@@ -22,6 +22,7 @@ import org.sampong.onlinebanking.transfer.service.mapper.TranceServiceMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.resilience.annotation.Retryable;
 //import org.springframework.retry.annotation.Recover;
 import org.springframework.stereotype.Service;
@@ -94,7 +95,8 @@ public class TranceServiceImp implements TranceService {
 
     @Transactional
     @Override
-    public Transaction transferBalance(TransferRequest request) {
+    @AccountLock(values = { "#request.srcAccountId", "#request.targetAccountId" })
+    public Transaction transferBalance(TransferRequest request) throws InterruptedException {
         var result = processTransaction(request);
 
         if (!"SUCCESS".equals(result)) {
@@ -117,8 +119,9 @@ public class TranceServiceImp implements TranceService {
     }
 
     @Transactional
+    @AccountLock(values = { "#request.srcAccountId" })
     @Override
-    public Transaction withdrawBalance(TransferRequest request) {
+    public Transaction withdrawBalance(TransferRequest request) throws InterruptedException {
         var result = processTransaction(request);
 
         if (!"SUCCESS".equals(result)) {
@@ -140,7 +143,8 @@ public class TranceServiceImp implements TranceService {
 
     @Transactional
     @Override
-    public Transaction depositBalance(TransferRequest request) {
+    @AccountLock(values = { "#request.targetAccountId" })
+    public Transaction depositBalance(TransferRequest request) throws InterruptedException {
         var result = processTransaction(request);
 
         if (!"SUCCESS".equals(result)) {
@@ -165,35 +169,19 @@ public class TranceServiceImp implements TranceService {
     }
 
     @Transactional
-    @AccountLock(values = { "#request.accountId", "#request.desAccountId" })
+//    @AccountLock(values = { "#request.accountId", "#request.desAccountId" })
     @Retryable(
-            value = OptimisticLockException.class,
+            value = ObjectOptimisticLockingFailureException.class,
             maxAttempts = 3,
             delay = 200
     )
-    public String processTransaction(TransferRequest request) {
-        return switch (request.type()) {
+    public String processTransaction(TransferRequest request) throws InterruptedException {
+        Thread.sleep(5000);
+        var result = switch (request.type()) {
             case TRANSFER -> accountService.transfer(request);
             case WITHDRAW -> accountService.withdraw(request);
             case DEPOSIT -> accountService.deposit(request);
         };
+        return result;
     }
-
-    // Retry exhausted → record DLQ
-//    @Recover
-//    public String recover(OptimisticLockException ex, TransferRequest request) {
-//        log.error("❌ Transaction permanently failed, moved to DLQ: {}", request);
-//
-//        DeadLetterTransaction dlq = new DeadLetterTransaction();
-//        dlq.setFromAccountId(request.srcAccountId());
-//        dlq.setToAccountId(request.targetAccountId());
-//        dlq.setAmount(request.balance());
-//        dlq.setType(request.type().name());
-//        dlq.setCurrency(request.currency());
-//        dlq.setReason("Failed after 3 retries: " + ex.getMessage());
-//        dlq.setTrxnStatus(TranceStatus.PENDING);
-//
-//        dlqRepository.save(dlq);
-//        return "FAILED: MOVED_TO_DLQ";
-//    }
 }

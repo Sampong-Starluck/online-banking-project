@@ -20,7 +20,9 @@ public interface TransactionRestMapper {
 
     TransactionResponse to(Transaction transaction);
     @Mapping(target = "srcAccountId", source = "accountId")
+    @Mapping(target = "type", expression = "java(org.sampong.onlinebanking._common.enumerate.TranceType.WITHDRAW)")
     TransferRequest from(WithdrawRequest withdrawRequest);
+    @Mapping(target = "type", expression = "java(org.sampong.onlinebanking._common.enumerate.TranceType.DEPOSIT)")
     @Mapping(target = "targetAccountId", source = "accountId")
     TransferRequest from(DepositRequest depositRequest);
 }

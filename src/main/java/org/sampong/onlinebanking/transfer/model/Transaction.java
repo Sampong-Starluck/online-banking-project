@@ -21,15 +21,15 @@ public class Transaction extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = 0L;
-    @Column(name = "src_acc_number", nullable = false, updatable = false)
+    @Column(name = "src_acc_number", updatable = false)
     private String sourceAccountNumber = null;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "src_acc_id", nullable = false, updatable = false, referencedColumnName = "id")
+    @JoinColumn(name = "src_acc_id",  updatable = false, referencedColumnName = "id")
     private Account sourceAccount = null;
-    @Column(name = "des_acc_number", nullable = false, updatable = false)
+    @Column(name = "des_acc_number", updatable = false)
     private String destinationAccountNumber = null;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "des_acc_id", nullable = false, updatable = false, referencedColumnName = "id")
+    @JoinColumn(name = "des_acc_id", updatable = false, referencedColumnName = "id")
     private Account destinatioAccount = null;
     private Double amount = null;
     private Currency currency = null;

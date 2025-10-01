@@ -1,25 +1,12 @@
 ```toml
 name = 'New Project'
-id = '2ae36f56-bad8-4d7c-86dd-a8385f8fa55a'
+id = '8479f8fa-77f6-42de-a7c4-1f2793a1c657'
 
 [[environmentGroups]]
 name = 'Default'
-environments = ['Development']
 
 [[apis]]
-name = 'project API'
+name = 'test API'
 [apis.spring]
 pattern = 'org.sampong.onlinebanking.*'
-```
-
-#### Variables
-
-```json5
-{
-  development: {
-    baseUrl: 'http://localhost:8080',
-    username: 'System_admin',
-    password: '123456'
-  }
-}
 ```

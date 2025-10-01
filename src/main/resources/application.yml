@@ -53,6 +53,8 @@ swaggerdoc:
       packageName: org.sampong.onlinebanking.customer.controller
     - name: user
       packageName: org.sampong.onlinebanking.user.controller
+    - name: transfer
+      packageName: org.sampong.onlinebanking.transfer.controller
 springdoc:
   api-docs:
     groups:

@@ -28,12 +28,6 @@ public class AccountLockAnnotation {
 
     private final AccountLockManager lockManager;
     private final ExpressionParser parser = new SpelExpressionParser();
-
-    // Pointcut for methods annotated with @AccountLock
-    @Pointcut("@annotation(accountLock)")
-    public void annotatedMethod(AccountLock accountLock) {
-    }
-
     @Around("@annotation(accountLock)")
     public Object lockAccounts(ProceedingJoinPoint pjp, AccountLock accountLock) throws Throwable {
         MethodSignature sig = (MethodSignature) pjp.getSignature();
