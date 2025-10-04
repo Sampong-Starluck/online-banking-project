@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sampong.onlinebanking._common.base.BaseEntity;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "cus_customer")
 @Getter
@@ -22,4 +24,6 @@ public class Customer extends BaseEntity {
     private String lastName;
     private String email;
     private String phoneNumber;
+    private Integer age;
+    private LocalDate dateOfBirth;
 }

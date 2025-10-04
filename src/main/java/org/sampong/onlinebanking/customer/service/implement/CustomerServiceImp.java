@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +43,8 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public Customer addNew(Customer customer) {
         customer.setRefNo(generateRefNo(customer));
+        var age = LocalDate.now().getYear() - customer.getDateOfBirth().getYear();
+        customer.setAge(age);
         return customerRepository.save(customer);
     }
 
