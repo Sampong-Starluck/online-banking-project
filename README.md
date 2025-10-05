@@ -1,186 +1,170 @@
-# 🏦 Online Banking Application
+# Online Banking System
 
-A simple **Online Banking System** built with **Spring Boot** and **Gradle**,
-supporting core banking features such as **Account Management**, **Customer
-Management**, **Fund Transfers**, and **User Authentication**.
+## Table of contents
 
-This project demonstrates clean backend architecture with modular packages,
-service layers, and repository pattern.
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Tech Stack](#tech-stack)
+4. [Project Structure](#project-structure)
+5. [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Steps to run](#steps-to-run)
+6. [Configuration](#configuration)
+7. [API Overview](#api-overview)
+    - [User API](#user-api-apiusers)
+    - [Account API](#account-api-apiaccounts)
+    - [Customer API](#customer-api-apicustomers)
+    - [Transfer API](#transfer-api-apitransfers)
+8. [API Documentation](#-api-documents)
+9. [Testing](#testing)
+10. [Future Improvements](#future-improvements)
+11. [Frontend Side](#frontend-part)
+12. [Author](#author)
 
----
+## Overview
+A simple Online Banking API built with Spring Boot and Gradle.
+It provides core banking features such as user authentication, customer and account management, and fund transfers.
 
-## 📌 Features
+## Features
+- User registration and login (with authentication & authorization)
+- Account creation, update, and deletion
+- Customer profile management
+- Fund transfer between accounts
+- Centralized error handling and validation
+- Swagger documentation for APIs
 
-- 👤 User Registration & Authentication
-- 🏛️ Account Management (create, update, delete, view)
-- 👥 Customer Management
-- 💸 Fund Transfers between accounts
-- 🔐 Security layer with authentication & authorization
-- 🛠️ Common utilities for configuration, exception handling, and validation
+## Tech Stack
+- Java 21+
+- Spring Boot 3+
+- Spring Data JPA (Hibernate)
+- Spring Security
+- Gradle
+- PostgreSQL
+- Lombok
+- JUnit & Spring Test
+- Swagger / OpenAPI
 
----
-
-## 🔧 Tech Stack
-
-- **Java 21+**
-- **Spring Boot 3+**
-- **Spring Data JPA (Hibernate)**
-- **Spring Security**
-- **Gradle**
-- **PostgreSQL** (configurable in `application.yml`)
-- **Lombok**
-- **JUnit & Spring Test** for testing
-- **Swagger / OpenAPI** for API documentation
-
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
 src/main/java/org/sampong/onlinebanking
- ├── _common/           # common utilities (config, exceptions, enums, etc.)
- ├── account/           # account domain (controller, service, repository, model)
- ├── customer/          # customer domain
- ├── transfer/          # money transfer domain
- ├── user/              # authentication & user management
+ ├── _common/       (shared configs, exceptions, enums)
+ ├── account/       (account features)
+ ├── customer/      (customer features)
+ ├── transfer/      (fund transfer features)
+ ├── user/          (authentication & user management)
  └── OnlineBankingApplication.java
 
 src/main/resources
- ├── application.yml          # default config
- ├── application-dev.yml      # dev environment config
- ├── application-local.yml    # local environment config
- ├── sql/                     # database SQL scripts
- └── templates/               # templates (if using Thymeleaf)
+ ├── application.yml          (main configuration)
+ ├── application-dev.yml      (development environment)
+ ├── application-local.yml    (local environment)
+ └── sql/                     (database SQL scripts)
 ```
 
----
+## Getting Started
 
-## 🚀 Getting Started
+### Prerequisites:
+- Java 17 or higher
+  - Gradle
+  - PostgreSQL running locally
 
-### Prerequisites
-- Java 17+
-- Gradle
-- PostgreSQL
+### Steps to run
 
-### Build & Run
+1. Clone the repository:
+    ```shell
+      git clone https://github.com/<your-username>/online-banking.git
+      cd online-banking
+    ```
+2. Build the application:
+    ```shell
+      ./gradlew build
+    ```
+3. Run the application:
+    ```shell
+      ./gradlew bootRun
+    ```
 
-```bash
-    # Clone the repo
-    git clone https://github.com/<your-username>/online-banking.git
-    cd online-banking
-    
-    # Build project
-    ./gradlew build
-    
-    # Run Spring Boot application
-    ./gradlew bootRun
-```
+Application runs at: `http://localhost:8080`
 
-App runs at: **http://localhost:8080**
+## Configuration
 
----
+Configuration files:
+- application.yml          (default)
+- application-dev.yml      (development)
+- application-local.yml    (local testing)
 
-## ⚙️ Configuration
-
-You can configure profiles in `application.yml`:
-
-- `application.yml` → Base config
-- `application-dev.yml` → Development profile
-- `application-local.yml` → Local profile
-
-Switch profiles via:
-
-```bash
+Run with a specific profile:
+```shell
   ./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 
----
+## API Overview
 
-## 📖 API Endpoints
+### User API (`/api/users`)
 
-### 👤 User API (`/api/users`)
-| Method | Endpoint              | Description                | Body / Params                 |
-|--------|-----------------------|----------------------------|-------------------------------|
-| `POST` | `/api/users/register` | Register a new user        | `{username, password, email}` |
-| `POST` | `/api/users/login`    | Authenticate user (JWT)    | `{username, password}`        |
-| `GET`  | `/api/users/profile`  | Get logged-in user profile | Auth Header                   |
-
----
-
-### 🏦 Account API (`/api/accounts`)
-| Method   | Endpoint                  | Description             | Body / Params             |
-|----------|---------------------------|-------------------------|---------------------------|
-| `POST`   | `/api/accounts`           | Create a new account    | `{userId, type, balance}` |
-| `GET`    | `/api/accounts/{id}`      | Get account by ID       | Path ID                   |
-| `GET`    | `/api/accounts/user/{id}` | Get accounts by User ID | Path User ID              |
-| `PUT`    | `/api/accounts/{id}`      | Update account          | `{type, balance}`         |
-| `DELETE` | `/api/accounts/{id}`      | Delete account          | Path ID                   |
+| Method | Endpoint    | Description           |
+|--------|-------------|-----------------------|
+| POST   | `/register` | Register a new user   |
+| POST   | `/login`    | Authenticate user     |
+| GET    | `/profile`  | Get current user info |
 
 ---
 
-### 👥 Customer API (`/api/customers`)
-| Method   | Endpoint              | Description                | Body / Params        |
-|----------|-----------------------|----------------------------|----------------------|
-| `POST`   | `/api/customers`      | Create a customer profile  | `{name, dob, email}` |
-| `GET`    | `/api/customers/{id}` | Get customer details by ID | Path ID              |
-| `PUT`    | `/api/customers/{id}` | Update customer            | `{name, dob, email}` |
-| `DELETE` | `/api/customers/{id}` | Delete customer            | Path ID              |
+### Account API (`/api/accounts`)
+
+| Method | Endpoint     | Description          |
+|--------|--------------|----------------------|
+| POST   | `/`          | Create account       |
+| GET    | `/{id}`      | Get account by ID    |
+| GET    | `/user/{id}` | Get accounts by user |
+| PUT    | `/{id}`      | Update account       |
+| DELETE | `/{id}`      | Delete account       |
 
 ---
 
-### 💸 Transfer API (`/api/transfers`)
-| Method | Endpoint                   | Description                     | Body / Params                          |
-|--------|----------------------------|---------------------------------|----------------------------------------|
-| `POST` | `/api/transfers`           | Transfer funds between accounts | `{fromAccountId, toAccountId, amount}` |
-| `GET`  | `/api/transfers/{id}`      | Get transfer details by ID      | Path ID                                |
-| `GET`  | `/api/transfers/user/{id}` | Get transfers by User           | Path User ID                           |
+### Customer API (`/api/customers`)
+
+| Method | Endpoint | Description        |
+|--------|----------|--------------------|
+| POST   | `/`      | Create customer    |
+| GET    | `/{id}`  | Get customer by ID |
+| PUT    | `/{id}`  | Update customer    |
+| DELETE | `/{id}`  | Delete customer    |
 
 ---
 
-## 📑 Swagger / OpenAPI Setup
+### Transfer API (`/api/transfers`)
 
-This project includes **Swagger UI** for interactive API documentation.
+| Method | Endpoint     | Description                     |
+|--------|--------------|---------------------------------|
+| POST   | `/`          | Transfer funds between accounts |
+| GET    | `/{id}`      | Get transfer info               |
+| GET    | `/user/{id}` | Get transfers for a user        |
 
-### Add Dependency (`build.gradle.kts`)
+## API Documents
+------------------------------------------------------------
+Swagger UI and OpenAPI are enabled for exploring and testing APIs.
 
-```kotlin
-dependencies {
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-}
+- Swagger UI:   `http://localhost:8080/v3/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+
+## Testing
+Run all tests:
+```shell
+  ./gradlew test
 ```
 
-### Access Swagger UI
-Once the app is running:
+## Future improvements
+- Admin dashboard for user and account management
+- Role-based access control (RBAC)
+- Multiple currency support
+- Transaction history and analytics
+- Docker container setup and CI/CD integration
 
-👉 Go to: **http://localhost:8080/v3/swagger-ui/index.html**  
-👉 Open raw OpenAPI docs: **http://localhost:8080/v3/api-docs**
+## Frontend part
+- Frontend: [banking-client](https://gitlab.com/online-banking2/banking-client)
 
-This gives you an **interactive API explorer** for testing endpoints without Postman.
-
----
-
-## 🧪 Testing
-
-Run tests with:
-
-```bash
-./gradlew test
-```
-
----
-
-## 📌 Future Improvements
-
-- 🧑‍💼 Admin panel for managing users and accounts
-- 📱 REST API documentation with Swagger / OpenAPI
-- 🏦 Support for multiple currencies
-- 📊 Transaction history & reporting
-- 🛡 Enhanced security with JWT tokens & role-based access
-- ☁️ Docker & CI/CD setup
-
----
-
-## 👨‍💻 Author
-
-Built with ❤️ by **Starluck**
-- Backend Engineer
+## Author
+- Developed by: Starluck
+- Role: Backend Engineer (learning full-stack)
